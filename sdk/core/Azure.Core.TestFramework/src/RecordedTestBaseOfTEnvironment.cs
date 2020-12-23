@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 using System.Threading.Tasks;
 using Azure.ResourceManager.Resources;
+using Azure.Core.Pipeline;
+using System;
 
 namespace Azure.Core.TestFramework
 {
@@ -31,16 +33,20 @@ namespace Azure.Core.TestFramework
             TestEnvironment.SetRecording(Recording);
         }
 
-        protected ResourcesManagementClient GetResourceManagementClient()
+        protected ResourceGroupClient GetResourceManagementClient()
         {
-            var options = InstrumentClientOptions(new ResourcesManagementClientOptions());
+            var options = InstrumentClientOptions(new CleanUpClientOptions());
             CleanupPolicy = new ResourceGroupCleanupPolicy();
             options.AddPolicy(CleanupPolicy, HttpPipelinePosition.PerCall);
+            return new ResourceGroupClient(
+                TestEnvironment.SubscriptionId, 
+                TestEnvironment.Credential, 
+                options);
 
-            return CreateClient<ResourcesManagementClient>(
+            /*return CreateClient<ResourcesManagementClient>(
                 TestEnvironment.SubscriptionId,
                 TestEnvironment.Credential,
-                options);
+                options);*/
         }
 
         protected async Task CleanupResourceGroupsAsync()
@@ -58,5 +64,55 @@ namespace Azure.Core.TestFramework
             }
         }
         public TEnvironment TestEnvironment { get; }
+
+        public class ResourceGroupClient
+        {
+            private readonly HttpPipeline _pipeline;
+            private readonly Uri _endpoint;
+            private readonly string _subscriptionId;
+
+            internal ResourceGroupClient(string subscriptionId, TokenCredential tokenCredential, ClientOptions options)
+            {
+                _endpoint = new Uri("https://management.azure.com");;
+                if (subscriptionId == null)
+                {
+                    throw new ArgumentNullException(nameof(subscriptionId));
+                }
+                _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(tokenCredential, $"{_endpoint}/.default"));
+                _subscriptionId = subscriptionId;
+            }
+
+            public Response<ResourceGroup> CreateOrUpdate(string resourceGroupName, ResourceGroup parameters, CancellationToken cancellationToken = default)
+            {
+                if (resourceGroupName == null)
+                {
+                    throw new ArgumentNullException(nameof(resourceGroupName));
+                }
+                if (parameters == null)
+                {
+                    throw new ArgumentNullException(nameof(parameters));
+                }
+
+                using var message = CreateCreateOrUpdateRequest(resourceGroupName, parameters);
+                _pipeline.Send(message, cancellationToken);
+                switch (message.Response.Status)
+                {
+                    case 200:
+                    case 201:
+                        {
+                            ResourceGroup value = default;
+                            using var document = JsonDocument.Parse(message.Response.ContentStream);
+                            value = ResourceGroup.DeserializeResourceGroup(document.RootElement);
+                            return Response.FromValue(value, message.Response);
+                        }
+                    default:
+                        throw _clientDiagnostics.CreateRequestFailedException(message.Response);
+                }
+            }
+        }
+
+        private class CleanUpClientOptions : ClientOptions 
+        {
+        }
     }
 }

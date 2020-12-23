@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Moq" />
     <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net47'"/>
-     <ProjectReference Include="../../../resources/Azure.ResourceManager.Resources/src/Azure.ResourceManager.Resources.csproj" />
+    <PackageReference Include="Azure.ResourceManager.Resources" />
   </ItemGroup>
   <!-- Import Azure.Core shared source -->
   <ItemGroup>
