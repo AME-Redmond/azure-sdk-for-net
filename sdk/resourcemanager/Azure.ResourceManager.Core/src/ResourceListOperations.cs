@@ -25,12 +25,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentNullException"> resourceGroup cannot be null. </exception>
         public static Pageable<GenericResource> ListAtContext(
             ResourceGroupOperations resourceGroup,
             ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
+            if (resourceGroup is null)
+                throw new ArgumentNullException(nameof(resourceGroup));
+
             return ListAtContextInternal(
                 resourceGroup,
                 resourceGroup.Id.Name,
@@ -47,12 +51,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="CancellationToken.None" />. </param>
         /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentNullException"> resourceGroup cannot be null. </exception>
         public static AsyncPageable<GenericResource> ListAtContextAsync(
             ResourceGroupOperations resourceGroup,
             ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
+            if (resourceGroup is null)
+                throw new ArgumentNullException(nameof(resourceGroup));
+
             return ListAtContextInternalAsync(
                 resourceGroup,
                 resourceGroup.Id.Name,
@@ -69,12 +77,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentNullException"> subscription cannot be null. </exception>
         public static Pageable<GenericResource> ListAtContext(
             SubscriptionOperations subscription,
             ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
+            if (subscription is null)
+                throw new ArgumentNullException(nameof(subscription));
+
             return ListAtContextInternal(
                 subscription,
                 null,
@@ -91,12 +103,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentNullException"> subscription cannot be null. </exception>
         public static AsyncPageable<GenericResource> ListAtContextAsync(
             SubscriptionOperations subscription,
             ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
+            if (subscription is null)
+                throw new ArgumentNullException(nameof(subscription));
+
             return ListAtContextInternalAsync(
                 subscription,
                 null,

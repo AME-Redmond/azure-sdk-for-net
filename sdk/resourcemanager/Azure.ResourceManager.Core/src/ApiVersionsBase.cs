@@ -42,9 +42,13 @@ namespace Azure.ResourceManager.Core
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator >(ApiVersionsBase left, ApiVersionsBase right)
+        public static bool operator > (ApiVersionsBase left, ApiVersionsBase right)
         {
-            if (left is null)
+            if (ReferenceEquals(null, right) && ReferenceEquals(null, left))
+                return false;
+            if (ReferenceEquals(null, right) && !ReferenceEquals(null, left))
+                return true;
+            if (ReferenceEquals(null, left))
                 return false;
 
             return left.CompareTo(right) == 1;
@@ -57,6 +61,10 @@ namespace Azure.ResourceManager.Core
         /// <returns> API version value. </returns>
         public static implicit operator string(ApiVersionsBase version)
         {
+            if (ReferenceEquals(null, version))
+            {
+                throw new ArgumentNullException(nameof(version));
+            }
             return version._value;
         }
 
@@ -109,7 +117,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Comparison result in integer. 1 for greater than, 0 for equals to, and -1 for less than. </returns>
         public int CompareTo(string other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return 1;
             }
