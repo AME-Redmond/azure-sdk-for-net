@@ -28,9 +28,13 @@ namespace Azure.ResourceManager.Core
         /// <param name="left"></param>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static bool operator <(ApiVersionsBase left, ApiVersionsBase right)
+        public static bool operator < (ApiVersionsBase left, ApiVersionsBase right)
         {
-            if (left is null)
+            if (ReferenceEquals(null, right) && ReferenceEquals(null, left))
+                return false;
+            if (ReferenceEquals(null, right) && !ReferenceEquals(null, left))
+                return false;
+            if (ReferenceEquals(null, left))
                 return true;
 
             return left.CompareTo(right) == -1;
@@ -139,7 +143,7 @@ namespace Azure.ResourceManager.Core
                 {
                     return 0;
                 }
-
+                
                 if (string.IsNullOrEmpty(otherPreviewPart))
                 {
                     return -1;
@@ -188,14 +192,9 @@ namespace Azure.ResourceManager.Core
         public override bool Equals(object obj)
         {
             if (obj is ApiVersionsBase)
-            {
                 return Equals(obj as ApiVersionsBase);
-            }
-
             if (obj is string)
-            {
                 return Equals(obj as string);
-            }
 
             return false;
         }
