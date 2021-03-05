@@ -14,11 +14,6 @@ namespace Azure.ResourceManager.Core
         IComparable<string>
     {
         /// <summary>
-        /// The "none" resource type
-        /// </summary>
-        public static readonly ResourceType None = new ResourceType { Namespace = string.Empty, Type = string.Empty };
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ResourceType"/> class.
         /// </summary>
         /// <param name="resourceIdOrType"> Option to provide the Resource Type directly, or a Resource ID from which the type is going to be obtained. </param>
@@ -28,6 +23,29 @@ namespace Azure.ResourceManager.Core
                 throw new ArgumentException($"{nameof(resourceIdOrType)} cannot be null or whitespace", nameof(resourceIdOrType));
 
             Parse(resourceIdOrType);
+            Types = Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="providerNamespace"></param>
+        /// <param name="name"></param>
+        internal ResourceType(string providerNamespace, string name)
+        {
+            Namespace = providerNamespace;
+            Type = name;
+            Types = Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>
+        /// Create child resource type using parent resource type
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="childType"></param>
+        internal ResourceType(ResourceType parent, string childType) 
+            : this(parent.Namespace, $"{parent.Type}/{childType}")
+        {
         }
 
         private ResourceType()
@@ -44,23 +62,28 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         public string Type { get; private set; }
 
+        internal IList<string> Types { get; } = new List<string>();
+
         /// <summary>
-        /// Gets the resource type Parent.
+        /// 
         /// </summary>
-        public ResourceType Parent
+        /// <param name="child"></param>
+        /// <returns></returns>
+        public bool IsParentOf(ResourceType child)
         {
-            get
+            if (!string.Equals(Namespace, child.Namespace, StringComparison.InvariantCultureIgnoreCase))
+                return false;
+            var types = Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var childTypes = child.Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (types.Length >= childTypes.Length)
+                return false;
+            for (int i = 0; i < types.Length; ++i)
             {
-                var parts = Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (parts.Length < 2)
-                    return None;
-
-                var list = new List<string>(parts);
-                list.RemoveAt(list.Count - 1);
-
-                return new ResourceType($"{Namespace}/{string.Join("/", list.ToArray())}");
+                if (!string.Equals(types[i], childTypes[i], StringComparison.InvariantCultureIgnoreCase))
+                    return false;
             }
+
+            return true;
         }
 
         /// <summary>
@@ -172,14 +195,12 @@ namespace Azure.ResourceManager.Core
             if (ReferenceEquals(this, other))
                 return 0;
 
-            int compareResult = 0;
-            if ((compareResult = string.Compare(Namespace, other.Namespace, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
-                (compareResult = string.Compare(Type, other.Type, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
-                (other.Parent != null))
+            int compareResult = string.Compare(Namespace, other.Namespace, StringComparison.InvariantCultureIgnoreCase);
+            if (compareResult == 0)
             {
-                return Parent.CompareTo(other.Parent);
+                compareResult = string.Compare(Type, other.Type, StringComparison.InvariantCultureIgnoreCase);
             }
-
+            
             return compareResult;
         }
 
