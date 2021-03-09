@@ -1,13 +1,32 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Azure.ResourceManager.Core.Resources
+using System;
+
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// 
     /// </summary>
     public class LocationLevelResourceIdentifier : ContainedResourceIdentifier
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resourceId"></param>
+        public LocationLevelResourceIdentifier(string resourceId)
+        {
+            var id = NewResourceIdentifier.Create(resourceId) as LocationLevelResourceIdentifier;
+            if (id is null)
+                throw new ArgumentException("Not a valid tenant level resource", nameof(resourceId));
+            Name = id.Name;
+            ResourceType = id.ResourceType;
+            Parent = id.Parent;
+            IsChild = id.IsChild;
+            Location = id.Location;
+            SubscriptionId = id.SubscriptionId;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -56,5 +75,27 @@ namespace Azure.ResourceManager.Core.Resources
         /// 
         /// </summary>
         public string SubscriptionId { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public override bool TryGetLocation(out LocationData location)
+        {
+            location = Location;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public override bool TryGetSubscriptionId(out string subscriptionId)
+        {
+            subscriptionId = SubscriptionId;
+            return true;
+        }
     }
 }

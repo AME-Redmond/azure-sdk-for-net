@@ -136,12 +136,12 @@ namespace Proto.Compute
         private ResourceIdentity VmIdentityToIdentity(VirtualMachineIdentity vmIdentity)
         {
             SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid(vmIdentity.TenantId), new Guid(vmIdentity.PrincipalId));
-            var userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
+            var userAssignedIdentities = new Dictionary<ResourceGroupLevelResourceIdentifier, UserAssignedIdentity>();
             if (vmIdentity.UserAssignedIdentities != null)
             {
                 foreach (var entry in vmIdentity.UserAssignedIdentities)
                 {
-                    ResourceIdentifier resourceId = new ResourceIdentifier(entry.Key);
+                    var resourceId = new ResourceGroupLevelResourceIdentifier(entry.Key);
                     var userAssignedIdentity = new UserAssignedIdentity(new Guid(entry.Value.ClientId), new Guid(entry.Value.PrincipalId));
                     userAssignedIdentities[resourceId] = userAssignedIdentity;
                 }

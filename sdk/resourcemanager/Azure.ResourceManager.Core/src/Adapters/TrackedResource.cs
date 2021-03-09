@@ -9,16 +9,17 @@ namespace Azure.ResourceManager.Core
     /// A class representing a generic tracked resource in Azure.
     /// </summary>
     /// <typeparam name="TModel"> The type of the underlying model this class wraps </typeparam>
-    public abstract class TrackedResource<TModel> : TrackedResource
+    /// <typeparam name="TIdentifier"> The type of the underlying resource id </typeparam>
+    public abstract class TrackedResource<TModel, TIdentifier> : TrackedResource<TIdentifier> where TIdentifier : NewResourceIdentifier
         where TModel : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrackedResource{TModel}"/> class.
+        /// Initializes a new instance of the <see cref="TrackedResource{TModel, TIdentifier}"/> class.
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <param name="data"> The model to copy from. </param>
-        protected TrackedResource(ResourceIdentifier id, LocationData location, TModel data)
+        protected TrackedResource(TIdentifier id, LocationData location, TModel data)
         {
             Id = id;
             Location = location;
@@ -26,7 +27,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrackedResource{TModel}"/> class.
+        /// Initializes a new instance of the <see cref="TrackedResource{TModel, TIdentifier}"/> class.
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
@@ -39,7 +40,7 @@ namespace Azure.ResourceManager.Core
             }
             else
             {
-                Id = id;
+                Id = NewResourceIdentifier.Create(id) as TIdentifier;
             }
 
             Location = location;
@@ -55,7 +56,7 @@ namespace Azure.ResourceManager.Core
         /// Converts from a <see cref="TrackedResource{TModel}"/> into the TModel.
         /// </summary>
         /// <param name="other"> The tracked resource convert from. </param>
-        public static implicit operator TModel(TrackedResource<TModel> other)
+        public static implicit operator TModel(TrackedResource<TModel, TIdentifier> other)
         {
             return other.Model;
         }

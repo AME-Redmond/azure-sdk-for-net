@@ -27,7 +27,7 @@ namespace Proto.Client
             {
                 foreach (var rgId in CleanUp)
                 {
-                    ResourceIdentifier id = new ResourceIdentifier(rgId);
+                    var id = new ResourceGroupResourceIdentifier(rgId);
                     var rg = new AzureResourceManagerClient().GetResourceGroupOperations(rgId);
                     Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                     try

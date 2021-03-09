@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Linq;
 
-namespace Azure.ResourceManager.Core.Resources
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TenantLevelResourceIdentifier : XResourceIdentifier
+    public class TenantLevelResourceIdentifier : NewResourceIdentifier
     {
         /// <summary>
         /// 
@@ -27,6 +28,14 @@ namespace Azure.ResourceManager.Core.Resources
         /// <param name="resourceName"></param>
         public TenantLevelResourceIdentifier(string providerNamespace, string typeName, string resourceName) 
             : this (new ResourceType(providerNamespace, typeName), resourceName)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="resourceId"></param>
+        public TenantLevelResourceIdentifier(string resourceId) : base(resourceId)
         {
         }
 

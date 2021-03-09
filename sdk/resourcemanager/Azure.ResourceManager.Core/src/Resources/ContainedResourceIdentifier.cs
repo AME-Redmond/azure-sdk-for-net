@@ -5,14 +5,18 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace Azure.ResourceManager.Core.Resources
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class ContainedResourceIdentifier : XResourceIdentifier
+    public abstract class ContainedResourceIdentifier : NewResourceIdentifier
     {
-        internal ContainedResourceIdentifier(XResourceIdentifier containerId, ResourceType resourceType, string name) : base(resourceType, name)
+        internal ContainedResourceIdentifier()
+        {
+        }
+
+        internal ContainedResourceIdentifier(NewResourceIdentifier containerId, ResourceType resourceType, string name) : base(resourceType, name)
         {
             Parent = containerId;
             IsChild = containerId.ResourceType.IsParentOf(resourceType);
@@ -21,16 +25,16 @@ namespace Azure.ResourceManager.Core.Resources
         /// <summary>
         /// 
         /// </summary>
-        public XResourceIdentifier Parent { get; }
+        public NewResourceIdentifier Parent { get; internal set; }
 
-        internal virtual bool IsChild { get; }
+        internal virtual bool IsChild { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="containerId"></param>
         /// <returns></returns>
-        public override bool TryGetContainerId(out XResourceIdentifier containerId)
+        public override bool TryGetContainerId(out NewResourceIdentifier containerId)
         {
             containerId = Parent;
             return true;
@@ -53,7 +57,9 @@ namespace Azure.ResourceManager.Core.Resources
             StringBuilder builder = new StringBuilder(Parent.ToResourceString());
             if (IsChild)
             {
-                builder.Append($"/{ResourceType.Types.Last()}/{Name}");
+                builder.Append($"/{ResourceType.Types.Last()}");
+                if (!string.IsNullOrWhiteSpace(Name))
+                    builder.Append($"/{Name}");
             }
             else
             {

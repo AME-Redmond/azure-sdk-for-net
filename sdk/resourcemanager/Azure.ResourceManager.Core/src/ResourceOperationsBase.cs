@@ -18,9 +18,18 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
+        /// <param name="operations">The generic operations representing the resource</param>
+        protected ResourceOperationsBase(GenericResourceOperations operations)
+            : base(operations.ClientOptions, operations.Id, operations.Credential, operations.BaseUri)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
+        /// </summary>
         /// <param name="operations"> The operations representing the resource. </param>
         protected ResourceOperationsBase(ResourceOperationsBase operations)
-            : base(operations.ClientOptions, operations.Id, operations.Credential, operations.BaseUri)
+            : base(operations.ClientOptions, operations.GenericId, operations.Credential, operations.BaseUri)
         {
         }
 
@@ -29,7 +38,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The operations to copy options from. </param>
         /// <param name="resourceId">The resource that is the target of operations.</param>
-        protected ResourceOperationsBase(ResourceOperationsBase options, ResourceIdentifier resourceId)
+        protected ResourceOperationsBase(ResourceOperationsBase options, NewResourceIdentifier resourceId)
             : base(options.ClientOptions, resourceId, options.Credential, options.BaseUri)
         {
         }
@@ -41,7 +50,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="resourceId"> The identifier of the resource that is the target of operations. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="baseUri"> The base URI of the service. </param>
-        protected ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier resourceId, TokenCredential credential, Uri baseUri)
+        protected ResourceOperationsBase(AzureResourceManagerClientOptions options, NewResourceIdentifier resourceId, TokenCredential credential, Uri baseUri)
             : base(options, resourceId, credential, baseUri)
         {
         }
@@ -51,12 +60,13 @@ namespace Azure.ResourceManager.Core
     /// Base class for all operations over a resource
     /// </summary>
     /// <typeparam name="TOperations"> The type implementing operations over the resource. </typeparam>
+    /// <typeparam name="TIdentifier"> The The identifier type for the resource. </typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Types differ by type argument only")]
-    public abstract class ResourceOperationsBase<TOperations> : ResourceOperationsBase
-        where TOperations : ResourceOperationsBase<TOperations>
+    public abstract class ResourceOperationsBase<TIdentifier, TOperations> : ResourceOperationsBase
+        where TOperations : ResourceOperationsBase<TIdentifier, TOperations> where TIdentifier : NewResourceIdentifier
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="genericOperations"> Generic ARMResourceOperations for this resource type. </param>
         protected ResourceOperationsBase(GenericResourceOperations genericOperations)
@@ -65,25 +75,33 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="parentOperations"> The resource representing the parent resource. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        protected ResourceOperationsBase(ResourceOperationsBase parentOperations, ResourceIdentifier id)
+        protected ResourceOperationsBase(ResourceOperationsBase parentOperations, TIdentifier id)
             : base(parentOperations, id)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceId"> The identifier of the resource that is the target of operations. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="baseUri"> The base URI of the service. </param>
-        protected ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier resourceId, TokenCredential credential, Uri baseUri)
+        protected ResourceOperationsBase(AzureResourceManagerClientOptions options, TIdentifier resourceId, TokenCredential credential, Uri baseUri)
             : base(options, resourceId, credential, baseUri)
         {
+        }
+
+        /// <summary>
+        /// The typed resource identifier for the underlying resource
+        /// </summary>
+        public virtual TIdentifier Id
+        {
+            get { return GenericId as TIdentifier; }
         }
 
         /// <summary>

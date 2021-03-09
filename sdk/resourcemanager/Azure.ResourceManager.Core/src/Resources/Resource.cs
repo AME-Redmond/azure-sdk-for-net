@@ -8,13 +8,13 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing the base resource used by all azure resources.
     /// </summary>
-    public abstract class Resource : IEquatable<Resource>, IEquatable<string>, IComparable<Resource>,
-        IComparable<string>
+    public abstract class Resource<TIdentifier> : IEquatable<Resource<TIdentifier>>, IEquatable<string>, IComparable<Resource<TIdentifier>>,
+        IComparable<string> where TIdentifier : NewResourceIdentifier
     {
         /// <summary>
         /// Gets or sets the resource identifier.
         /// </summary>
-        public abstract ResourceIdentifier Id { get; protected set; }
+        public abstract TIdentifier Id { get; protected set; }
 
         /// <summary>
         /// Gets the name.
@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
         public virtual ResourceType Type => Id?.Type;
 
         /// <inheritdoc/>
-        public virtual int CompareTo(Resource other)
+        public virtual int CompareTo(Resource<TIdentifier> other)
         {
             if (other == null)
                 return 1;
@@ -51,7 +51,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public virtual bool Equals(Resource other)
+        public virtual bool Equals(Resource<TIdentifier> other)
         {
             if (Id == null)
                 return false;

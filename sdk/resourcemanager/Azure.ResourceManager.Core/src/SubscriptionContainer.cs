@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing collection of Subscription and their operations
     /// </summary>
-    public class SubscriptionContainer : ContainerBase<Subscription>
+    public class SubscriptionContainer : ContainerBase<NewResourceIdentifier, Subscription>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionContainer"/> class.

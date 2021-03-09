@@ -19,20 +19,19 @@ namespace Azure.ResourceManager.Core
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="baseUri"> The base URI of the service. </param>
-        protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, TokenCredential credential, Uri baseUri)
+        protected OperationsBase(AzureResourceManagerClientOptions options, NewResourceIdentifier id, TokenCredential credential, Uri baseUri)
         {
             ClientOptions = options;
-            Id = id;
+            GenericId = id;
             Credential = credential;
             BaseUri = baseUri;
-
             Validate(id);
         }
 
         /// <summary>
         /// Gets the resource identifier.
         /// </summary>
-        public virtual ResourceIdentifier Id { get; }
+        internal virtual NewResourceIdentifier GenericId { get; }
 
         /// <summary>
         /// Gets the Azure Resource Manager client options.
@@ -58,16 +57,28 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the resource client.
         /// </summary>
-        protected ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
+        protected ResourcesManagementClient ResourcesClient
+        {
+            get
+            {
+                string subscription;
+                if (!Id.TryGetSubscriptionId(out subscription))
+                {
+                    throw new InvalidOperationException("Subscription is not available.");
+                }
+
+                return new ResourcesManagementClient(BaseUri, subscription, Credential);
+            }
+        }
 
         /// <summary>
         /// Validate the resource identifier against current operations.
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
-        protected virtual void Validate(ResourceIdentifier identifier)
+        protected virtual void Validate(NewResourceIdentifier identifier)
         {
-            if (identifier?.Type != ValidResourceType)
-                throw new ArgumentException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
+            if (identifier?.ResourceType != ValidResourceType)
+                throw new ArgumentException($"Invalid resource type {identifier?.ResourceType} expected {ValidResourceType}");
         }
     }
 }

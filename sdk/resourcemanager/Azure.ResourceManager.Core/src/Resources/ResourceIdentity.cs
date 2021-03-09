@@ -30,14 +30,14 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="user"> Dictionary with a <see cref="ResourceIdentifier"/> key and a <see cref="UserAssignedIdentity"/> object value. </param>
         /// <param name="useSystemAssigned"> Flag for using <see cref="SystemAssignedIdentity"/> or not. </param>
-        public ResourceIdentity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
+        public ResourceIdentity(Dictionary<ResourceGroupResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
             // check for combination of user and system on the impact to type value
             SystemAssignedIdentity = useSystemAssigned ? new SystemAssignedIdentity() : null;
-            UserAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
+            UserAssignedIdentities = new Dictionary<ResourceGroupResourceIdentifier, UserAssignedIdentity>();
             if (user != null)
             {
-                foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in user)
+                foreach (KeyValuePair<ResourceGroupResourceIdentifier, UserAssignedIdentity> id in user)
                 {
                     UserAssignedIdentities.Add(id.Key, id.Value);
                 }
@@ -71,7 +71,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets a dictionary of the User Assigned Identities.
         /// </summary>
-        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
+        public IDictionary<ResourceGroupResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
 
         /// <summary>
         /// Converts a <see cref="JsonElement"/> into an <see cref="ResourceIdentity"/> object.

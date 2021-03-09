@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing the operations that can be performed over a specific subscription.
     /// </summary>
-    public class SubscriptionOperations : ResourceOperationsBase<Subscription>
+    public class SubscriptionOperations : ResourceOperationsBase<SubscriptionResourceIdentifier, Subscription>
     {
         /// <summary>
         /// The resource type for subscription
@@ -28,7 +28,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="baseUri"> The base URI of the service. </param>
         internal SubscriptionOperations(AzureResourceManagerClientOptions options, string subscriptionId, TokenCredential credential, Uri baseUri)
-            : base(options, $"/subscriptions/{subscriptionId}", credential, baseUri)
+            : base(options, new SubscriptionResourceIdentifier(subscriptionId), credential, baseUri)
         {
         }
 
@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="subscription"> The subscription operations to copy client options from. </param>
         /// <param name="id"> The identifier of the subscription. </param>
-        protected SubscriptionOperations(SubscriptionOperations subscription, ResourceIdentifier id)
+        protected SubscriptionOperations(SubscriptionOperations subscription, SubscriptionResourceIdentifier id)
             : base(subscription.ClientOptions, id, subscription.Credential, subscription.BaseUri)
         {
         }

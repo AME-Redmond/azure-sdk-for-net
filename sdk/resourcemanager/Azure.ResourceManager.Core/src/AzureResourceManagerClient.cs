@@ -149,9 +149,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupId"> The resource identifier of the resource group. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
+        public ResourceGroupOperations GetResourceGroupOperations(ResourceGroupResourceIdentifier resourceGroupId)
         {
-            return GetSubscriptionOperations(resourceGroupId.Subscription).GetResourceGroupOperations(resourceGroupId.ResourceGroup);
+            return GetSubscriptionOperations(resourceGroupId.SubscriptionId).GetResourceGroupOperations(resourceGroupId.ResourceGroupName);
         }
 
         /// <summary>
