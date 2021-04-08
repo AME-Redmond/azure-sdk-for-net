@@ -33,7 +33,9 @@ namespace Azure.Core.TestFramework
                 invocation.Proceed();
                 invocation.ReturnValue = Activator.CreateInstance(typeof(DiagnosticScopeValidatingAsyncEnumerable<>).MakeGenericType(genericType.GenericTypeArguments[0]), invocation.ReturnValue, expectedName, methodName, strict);
             }
-            else if (methodName.EndsWith("Async") && !invocation.Method.ReturnType.Name.Contains("IAsyncEnumerable"))
+            else if (methodName.EndsWith("Async") &&
+                !invocation.Method.ReturnType.Name.Contains("IAsyncEnumerable") &&
+                !invocation.Method.Name.Contains("WaitForCompletionAsync"))
             {
                 Type genericArgument = typeof(object);
                 Type awaitableType = invocation.Method.ReturnType;
@@ -170,6 +172,11 @@ namespace Azure.Core.TestFramework
             private readonly string _methodName;
             private readonly bool _strict;
             private readonly bool _overridesGetAsyncEnumerator;
+
+            //for mocking
+            protected DiagnosticScopeValidatingAsyncEnumerable()
+            {
+            }
 
             public DiagnosticScopeValidatingAsyncEnumerable(AsyncPageable<T> pageable, string expectedName, string methodName, bool strict)
             {
