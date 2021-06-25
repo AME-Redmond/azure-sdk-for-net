@@ -1,0 +1,280 @@
+{
+  "Entries": [
+    {
+      "RequestUri": "https://localhost:8443/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f?api-version=2019-11-01",
+      "RequestMethod": "GET",
+      "RequestHeaders": {
+        "Accept": "application/json",
+        "Authorization": "Sanitized",
+        "User-Agent": "azsdk-net-ResourceManager.Core/1.0.0-alpha.20210625.1 (.NET Framework 4.8.4300.0; Microsoft Windows 10.0.19043 )",
+        "x-ms-client-request-id": "efe2f957a2e453ed2414ef97f4cfb9c7",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": null,
+      "StatusCode": 200,
+      "ResponseHeaders": {
+        "Connection": "keep-alive",
+        "Content-Length": "403",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 25 Jun 2021 15:39:56 GMT",
+        "ETag": "W/\u0022193-jD3lRR0JGbPL8DLcb6TB/rnVyW0\u0022",
+        "Keep-Alive": "timeout=5",
+        "X-Powered-By": "Express"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f",
+        "authorizationSource": "RoleBased",
+        "managedByTenants": [],
+        "subscriptionId": "9e223dbe-3399-4e19-88eb-0975f02ac87f",
+        "tenantId": "0000000-0000-0000-0000-000000000000",
+        "displayName": "Name of the subscription",
+        "state": "Enabled",
+        "subscriptionPolicies": {
+          "locationPlacementId": "Internal_2014-09-01",
+          "quotaId": "Internal_2014-09-01",
+          "spendingLimit": "Off"
+        }
+      }
+    },
+    {
+      "RequestUri": "https://localhost:8443/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f?api-version=2019-11-01",
+      "RequestMethod": "GET",
+      "RequestHeaders": {
+        "Accept": "application/json",
+        "Authorization": "Sanitized",
+        "User-Agent": "azsdk-net-ResourceManager.Core/1.0.0-alpha.20210625.1 (.NET Framework 4.8.4300.0; Microsoft Windows 10.0.19043 )",
+        "x-ms-client-request-id": "8f3dd922542631ec5739393a574bb31f",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": null,
+      "StatusCode": 200,
+      "ResponseHeaders": {
+        "Connection": "keep-alive",
+        "Content-Length": "403",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 25 Jun 2021 15:39:56 GMT",
+        "ETag": "W/\u0022193-jD3lRR0JGbPL8DLcb6TB/rnVyW0\u0022",
+        "Keep-Alive": "timeout=5",
+        "X-Powered-By": "Express"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f",
+        "authorizationSource": "RoleBased",
+        "managedByTenants": [],
+        "subscriptionId": "9e223dbe-3399-4e19-88eb-0975f02ac87f",
+        "tenantId": "0000000-0000-0000-0000-000000000000",
+        "displayName": "Name of the subscription",
+        "state": "Enabled",
+        "subscriptionPolicies": {
+          "locationPlacementId": "Internal_2014-09-01",
+          "quotaId": "Internal_2014-09-01",
+          "spendingLimit": "Off"
+        }
+      }
+    },
+    {
+      "RequestUri": "https://localhost:8443/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourcegroups/rg?api-version=2019-10-01",
+      "RequestMethod": "GET",
+      "RequestHeaders": {
+        "Accept": "application/json",
+        "Authorization": "Sanitized",
+        "User-Agent": "azsdk-net-ResourceManager.Core/1.0.0-alpha.20210625.1 (.NET Framework 4.8.4300.0; Microsoft Windows 10.0.19043 )",
+        "x-ms-client-request-id": "8d47aa4a5bae60fcf3f392a33521da72",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": null,
+      "StatusCode": 200,
+      "ResponseHeaders": {
+        "Connection": "keep-alive",
+        "Content-Length": "228",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 25 Jun 2021 15:39:56 GMT",
+        "ETag": "W/\u0022e4-PmY/MC1AcPcn4kY8mnfWZJ0/tYE\u0022",
+        "Keep-Alive": "timeout=5",
+        "X-Powered-By": "Express"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourcegroups/rg",
+        "location": "eastus",
+        "managedBy": null,
+        "name": "rg",
+        "properties": {
+          "provisioningState": "Succeeded"
+        },
+        "tags": {},
+        "type": "Microsoft.Resources/resourceGroups"
+      }
+    },
+    {
+      "RequestUri": "https://localhost:8443/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourceGroups/rg/providers/Microsoft.MachineLearningServices/workspaces/ws?api-version=2021-03-01-preview",
+      "RequestMethod": "PUT",
+      "RequestHeaders": {
+        "Accept": "application/json",
+        "Authorization": "Sanitized",
+        "Content-Length": "492",
+        "Content-Type": "application/json",
+        "User-Agent": "azsdk-net-ResourceManager.Core/1.0.0-alpha.20210625.1 (.NET Framework 4.8.4300.0; Microsoft Windows 10.0.19043 )",
+        "x-ms-client-request-id": "3445474b0d0297b1aa69b2fcd860d04d",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": {
+        "identity": {
+          "type": "None"
+        },
+        "location": "eastus",
+        "properties": {
+          "keyVault": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourceGroups/rg/providers/Microsoft.KeyVault/vaults/mltestkv9227",
+          "applicationInsights": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourceGroups/rg/providers/Microsoft.Insights/components/testappinsights8451",
+          "storageAccount": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourceGroups/rg/providers/Microsoft.Storage/storageAccounts/testsa334"
+        }
+      },
+      "StatusCode": 200,
+      "ResponseHeaders": {
+        "Connection": "keep-alive",
+        "Content-Length": "3110",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 25 Jun 2021 15:39:56 GMT",
+        "ETag": "W/\u0022c26-Wn9NadMJnm7bIWItsswDgJTBHGg\u0022",
+        "Keep-Alive": "timeout=5",
+        "X-Powered-By": "Express"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/9e223dbe-3399-4e19-88eb-0975f02ac87f/resourceGroups/rg/providers/Microsoft.MachineLearningServices/workspaces/ws",
+        "name": "ws",
+        "type": "aaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "properties": {
+          "workspaceId": "aaaaaaaaaaaaaaaa",
+          "description": "aaaaaaaaaa",
+          "friendlyName": "aaaaaaaaaaaaaaaa",
+          "keyVault": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "applicationInsights": "aaaaaaaa",
+          "containerRegistry": "aaaaaaaaaaaaaaaaaaaaaaaa",
+          "storageAccount": "aaaaaaaaaa",
+          "discoveryUrl": "aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "provisioningState": "Succeeded",
+          "encryption": {
+            "status": "Enabled",
+            "identity": {
+              "userAssignedIdentity": "aaaaaaaaaaaaaaaaaaaaaaaaa"
+            },
+            "keyVaultProperties": {
+              "keyVaultArmId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "keyIdentifier": "aaaaaaaaaaaaaaaaaaa",
+              "identityClientId": "aaaaaaaaaaaaaaaaa"
+            }
+          },
+          "hbiWorkspace": true,
+          "serviceProvisionedResourceGroup": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "privateLinkCount": 3,
+          "imageBuildCompute": "aaaaaaaaaaaaaaaaaaaa",
+          "allowPublicAccessWhenBehindVnet": true,
+          "privateEndpointConnections": [
+            {
+              "id": "/subscriptions/a9cbceed-cd54-47f1-b7a2-bad149218603/resourceGroups/mockRg/providers/Microsoft.Resources/mockResource/mockName",
+              "name": "ws",
+              "type": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "properties": {
+                "privateEndpoint": {
+                  "id": "/subscriptions/a9cbceed-cd54-47f1-b7a2-bad149218603/resourceGroups/mockRg/providers/Microsoft.Resources/mockResource/mockName",
+                  "subnetArmId": "aaaaaaaaaaaaaaaaa"
+                },
+                "privateLinkServiceConnectionState": {
+                  "status": "Pending",
+                  "description": "aaaaaaaaaaaa",
+                  "actionsRequired": "aaaaaaaaaaaaaaa"
+                },
+                "provisioningState": "Succeeded"
+              },
+              "identity": {
+                "principalId": "aaaaaaaaaaaa",
+                "tenantId": "aaaaaaaaaaaaaaa",
+                "type": "SystemAssigned",
+                "userAssignedIdentities": {
+                  "key2515": {
+                    "principalId": "aaaaaaaa",
+                    "tenantId": "a",
+                    "clientId": "a"
+                  }
+                }
+              },
+              "location": "aaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tags": {
+                "key766": "aaaaaaaaaaaaaaa"
+              },
+              "sku": {
+                "name": "ws",
+                "tier": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+              },
+              "systemData": {
+                "createdBy": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "createdByType": "User",
+                "createdAt": "2021-06-25T15:39:56.437Z",
+                "lastModifiedBy": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "lastModifiedByType": "User",
+                "lastModifiedAt": "2021-06-25T15:39:56.437Z"
+              }
+            }
+          ],
+          "sharedPrivateLinkResources": [
+            {
+              "name": "ws",
+              "properties": {
+                "privateLinkResourceId": "a",
+                "groupId": "aaaaaaaaaaaa",
+                "requestMessage": "aaaa",
+                "status": "Pending"
+              }
+            }
+          ],
+          "notebookInfo": {
+            "fqdn": "aaaaaaaaaaaaaa",
+            "resourceId": "aaaaaaaaaaaaaaaaaaaaaaaa",
+            "notebookPreparationError": {
+              "errorMessage": "aaaaa",
+              "statusCode": 5
+            }
+          },
+          "serviceManagedResourcesSettings": {
+            "cosmosDb": {
+              "collectionsThroughput": 25
+            }
+          },
+          "primaryUserAssignedIdentity": "aaaaaaaaaaaaaaa",
+          "tenantId": "aaaaaaa"
+        },
+        "identity": {
+          "principalId": "aaaaaaaaaaaa",
+          "tenantId": "aaaaaaaaaaaaaaa",
+          "type": "SystemAssigned",
+          "userAssignedIdentities": {
+            "key2515": {
+              "principalId": "aaaaaaaa",
+              "tenantId": "a",
+              "clientId": "a"
+            }
+          }
+        },
+        "location": "aaaaaaaaaaa",
+        "tags": {
+          "key9114": "aaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "sku": {
+          "name": "ws",
+          "tier": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "systemData": {
+          "createdBy": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "createdByType": "User",
+          "createdAt": "2021-06-25T15:39:56.437Z",
+          "lastModifiedBy": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "lastModifiedByType": "User",
+          "lastModifiedAt": "2021-06-25T15:39:56.437Z"
+        }
+      }
+    }
+  ],
+  "Variables": {
+    "RandomSeed": "596573261",
+    "SUBSCRIPTION_ID": "9e223dbe-3399-4e19-88eb-0975f02ac87f"
+  }
+}
