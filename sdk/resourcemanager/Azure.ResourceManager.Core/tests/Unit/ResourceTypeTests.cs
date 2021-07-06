@@ -174,6 +174,7 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceType leftResource = left;
             ResourceType rightResource = right;
             Assert.AreEqual(expected, leftResource == rightResource);
+            Assert.AreEqual(expected, leftResource?.GetHashCode() == rightResource?.GetHashCode());
         }
 
         [TestCase(true, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
@@ -229,6 +230,13 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceType rightRt = right;
             object rightObject = rightRt;
             Assert.AreEqual(expected, rt.Equals(rightObject));
+            Assert.AreEqual(expected, rt?.GetHashCode() == rightRt?.GetHashCode());
+
+            object sameRt = rt;
+            Assert.IsTrue(rt.Equals(sameRt));
+
+            object intRt = 5;
+            Assert.IsFalse(rt.Equals(intRt));
         }
 
         [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
@@ -251,6 +259,103 @@ namespace Azure.ResourceManager.Core.Tests
             string actual = type;
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/myVmName", "Microsoft.Compute", "virtualMachines", 1)]
+        [TestCase("Microsoft.Compute/virtualMachines", "Microsoft.Compute", "virtualMachines", 1)]
+        [TestCase("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/myVmName/fooType/fooName", "Microsoft.Compute", "virtualMachines/fooType", 2)]
+        [TestCase("Microsoft.Compute/virtualMachines/fooType", "Microsoft.Compute", "virtualMachines/fooType", 2)]
+        [TestCase("/providers/Microsoft.Insights/providers/Microsoft.Compute/virtualMachines/myVmName", "Microsoft.Compute", "virtualMachines", 1)]
+        [TestCase("/providers/Microsoft.Insights/providers/Microsoft.Network/virtualNetworks/testvnet/subnets/testsubnet", "Microsoft.Network", "virtualNetworks/subnets", 2)]
+        [TestCase("/providers/Microsoft.Compute/virtualMachines/myVmName/fooType/fooName", "Microsoft.Compute", "virtualMachines/fooType", 2)]
+        public void ValidateParse(string idOrType, string expectedNamespace, string expectedType, int expectedTypesCount)
+        {
+            ResourceType rt = idOrType;
+            Assert.AreEqual(expectedNamespace, rt.Namespace);
+            Assert.AreEqual(expectedType, rt.Type);
+            Assert.AreEqual(expectedTypesCount, rt.Types.Count);
+        }
+
+        [TestCase("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/myVmName/fooType/fooName",
+        "/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Compute/virtualMachines/myVmName",
+        true)]
+        public void ValidateIsParentOf(string childId, string parentId, bool expectedEquals)
+        {
+            ResourceType childRt = childId;
+            ResourceType parentRt = parentId;
+            Assert.AreEqual(expectedEquals, parentRt.IsParentOf(childRt));
+        }
+
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets2", "Microsoft.Network/virtualNetworks/subnets1")]
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets2")]
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets1")]
+        public void LessThanOperator(bool expected, string string1, string string2)
+        {
+            ResourceType rt1 = string1;
+            ResourceType rt2 = string2;
+            Assert.AreEqual(expected, rt1 < rt2);
+        }
+
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets2", "Microsoft.Network/virtualNetworks/subnets1")]
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets2")]
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets1")]
+        public void LessThanOrEqualOperator(bool expected, string string1, string string2)
+        {
+            ResourceType rt1 = string1;
+            ResourceType rt2 = string2;
+            Assert.AreEqual(expected, rt1 <= rt2);
+        }
+
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets2", "Microsoft.Network/virtualNetworks/subnets1")]
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets2")]
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets1")]
+        public void GreaterThanOperator(bool expected, string string1, string string2)
+        {
+            ResourceType rt1 = string1;
+            ResourceType rt2 = string2;
+            Assert.AreEqual(expected, rt1 > rt2);
+        }
+
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets2", "Microsoft.Network/virtualNetworks/subnets1")]
+        [TestCase(false, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets2")]
+        [TestCase(true, "Microsoft.Network/virtualNetworks/subnets1", "Microsoft.Network/virtualNetworks/subnets1")]
+        public void GreaterThanOrEqualOperator(bool expected, string string1, string string2)
+        {
+            ResourceType rt1 = string1;
+            ResourceType rt2 = string2;
+            Assert.AreEqual(expected, rt1 >= rt2);
+        }
+
+        [Test]
+        public void LessThanNull()
+        {
+            ResourceType rt = "Microsoft.Network/virtualNetworks/subnets1";
+            Assert.IsTrue(null < rt);
+            Assert.IsFalse(rt < null);
+        }
+
+        [Test]
+        public void LessThanOrEqualNull()
+        {
+            ResourceType rt = "Microsoft.Network/virtualNetworks/subnets1";
+            Assert.IsTrue(null <= rt);
+            Assert.IsFalse(rt <= null);
+        }
+
+        [Test]
+        public void GreaterThanNull()
+        {
+            ResourceType rt = "Microsoft.Network/virtualNetworks/subnets1";
+            Assert.IsFalse(null > rt);
+            Assert.IsTrue(rt > null);
+        }
+
+        [Test]
+        public void GreaterThanOrEqualNull()
+        {
+            ResourceType rt = "Microsoft.Network/virtualNetworks/subnets1";
+            Assert.IsFalse(null >= rt);
+            Assert.IsTrue(rt >= null);
         }
     }
 }

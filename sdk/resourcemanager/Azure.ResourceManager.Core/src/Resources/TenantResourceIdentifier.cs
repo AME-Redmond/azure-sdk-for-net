@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class 
+        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class
         /// </summary>
         /// <param name="resourceType"> The resource type (including namespace and type). </param>
         /// <param name="name"> The name of the resource. </param>
@@ -26,7 +26,20 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class 
+        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class
+        /// for resources in the same namespace as their parent.
+        /// </summary>
+        /// <param name="parent"> The parent resource id. </param>
+        /// <param name="resourceType"> The simple type name of the resource without slashes (/), for example 'virtualMachines'.</param>
+        /// <param name="resourceName"> The name of the resource. </param>
+        internal TenantResourceIdentifier(TenantResourceIdentifier parent, ResourceType resourceType, string resourceName)
+            : base(resourceType, resourceName)
+        {
+            Parent = parent;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class
         /// for resources in the same namespace as their parent.
         /// </summary>
         /// <param name="parent"> The parent resource id. </param>
@@ -40,7 +53,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class 
+        /// Initializes a new instance of the <see cref="TenantResourceIdentifier"/> class
         /// for resources in a different namespace than their parent.
         /// </summary>
         /// <param name="parent"> The parent resource id. </param>
@@ -77,10 +90,19 @@ namespace Azure.ResourceManager.Core
         {
             if (other is null)
                 return null;
-            TenantResourceIdentifier id = ResourceIdentifier.Create(other) as TenantResourceIdentifier;
-            if (id is null)
-                throw new ArgumentException("Not a valid tenant level resource", nameof(other));
-            return id;
+
+            return ResourceIdentifier.Create(other) as TenantResourceIdentifier;
+        }
+
+        /// <summary>
+        /// Tries to get the provider from the resource Id.
+        /// </summary>
+        /// <param name="providerId"> The id to parse for a provider. </param>
+        /// <returns> True if a provider exists. </returns>
+        public virtual bool TryGetProvider(out string providerId)
+        {
+            providerId = default(string);
+            return false;
         }
     }
 }

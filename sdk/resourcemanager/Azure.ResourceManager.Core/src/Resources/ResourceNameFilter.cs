@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Azure.ResourceManager.Core.Resources
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// A class representing a substring filter used in Azure API calls.
@@ -66,6 +66,24 @@ namespace Azure.ResourceManager.Core.Resources
             }
 
             return string.Join(" and ", builder);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            if (obj is string other)
+                return Equals(other);
+
+            return Equals(obj as ResourceNameFilter);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }

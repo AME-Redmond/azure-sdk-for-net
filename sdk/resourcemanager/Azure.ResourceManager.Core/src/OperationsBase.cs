@@ -4,7 +4,6 @@
 using System;
 using Azure.Core;
 using Azure.Core.Pipeline;
-using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Core
 {
@@ -13,10 +12,22 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public abstract class OperationsBase
     {
+        private ProviderContainer _providerContainer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationsBase"/> class for mocking.
         /// </summary>
         protected OperationsBase()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperationsBase"/> class.
+        /// </summary>
+        /// <param name="parentOperations"> The resource representing the parent resource. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        protected OperationsBase(OperationsBase parentOperations, ResourceIdentifier id)
+            : this(new ClientContext(parentOperations.ClientOptions, parentOperations.Credential, parentOperations.BaseUri, parentOperations.Pipeline), id)
         {
         }
 
@@ -35,6 +46,16 @@ namespace Azure.ResourceManager.Core
             Diagnostics = new ClientDiagnostics(ClientOptions);
 
             Validate(id);
+        }
+
+        /// <summary>
+        /// Gets the provider operations.
+        /// </summary>
+        protected ProviderContainer ProviderContainer => _providerContainer ??= GetProviderContainer();
+
+        private ProviderContainer GetProviderContainer()
+        {
+            return new ProviderContainer(this);
         }
 
         internal ClientDiagnostics Diagnostics { get; }
@@ -69,23 +90,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
         protected abstract ResourceType ValidResourceType { get; }
-
-        /// <summary>
-        /// Gets the resource client.
-        /// </summary>
-        protected ResourcesManagementClient ResourcesClient
-        {
-            get
-            {
-                string subscription;
-                if (!Id.TryGetSubscriptionId(out subscription))
-                {
-                    subscription = Guid.Empty.ToString();
-                }
-
-                return new ResourcesManagementClient(BaseUri, subscription, Credential, ClientOptions.Convert<ResourcesManagementClientOptions>());
-            }
-        }
 
         /// <summary>
         /// Validate the resource identifier against current operations.

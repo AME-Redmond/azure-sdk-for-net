@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 using System;
+using Azure.Core;
 
-namespace Azure.ResourceManager.Core.Resources
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// A class representing a tag filter used in Azure API calls.
@@ -60,6 +61,21 @@ namespace Azure.ResourceManager.Core.Resources
         public override string GetFilterString()
         {
             return $"tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            return Equals(obj as ResourceTagFilter);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return HashCodeBuilder.Combine(Key, Value);
         }
     }
 }

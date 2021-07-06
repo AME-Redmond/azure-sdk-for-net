@@ -49,25 +49,13 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// ListResources of type T.
+        /// Provides a way to reuse the protected client context.
         /// </summary>
-        /// <typeparam name="T"> The type of resource being returned in the list. </typeparam>
+        /// <typeparam name="T"> The actual type returned by the delegate. </typeparam>
         /// <param name="func"> The method to pass the internal properties to. </param>
-        /// <returns>  A collection of resources. </returns>
+        /// <returns> Whatever the delegate returns. </returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual Pageable<T> ListResources<T>(Func<Uri, TokenCredential, ArmClientOptions, HttpPipeline, Pageable<T>> func)
-        {
-            return func(BaseUri, Credential, ClientOptions, Pipeline);
-        }
-
-        /// <summary>
-        /// ListResources of type T.
-        /// </summary>
-        /// <typeparam name="T"> The type of resource being returned in the list. </typeparam>
-        /// <param name="func"> The method to pass the internal properties to. </param>
-        /// <returns>  A collection of resources. </returns>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual AsyncPageable<T> ListResourcesAsync<T>(Func<Uri, TokenCredential, ArmClientOptions, HttpPipeline, AsyncPageable<T>> func)
+        public virtual T UseClientContext<T>(Func<Uri, TokenCredential, ArmClientOptions, HttpPipeline, T> func)
         {
             return func(BaseUri, Credential, ClientOptions, Pipeline);
         }
@@ -95,6 +83,15 @@ namespace Azure.ResourceManager.Core
         public virtual LocationContainer GetLocations()
         {
             return new LocationContainer(this);
+        }
+
+        /// <summary>
+        /// Gets the provider container under this subscription.
+        /// </summary>
+        /// <returns> The provider container. </returns>
+        public virtual ProviderContainer GetProviders()
+        {
+            return new ProviderContainer(this);
         }
 
         /// <inheritdoc/>
@@ -193,7 +190,7 @@ namespace Azure.ResourceManager.Core
         /// Gets a container representing all resources as generic objects in the current tenant.
         /// </summary>
         /// <returns> GenericResource container. </returns>
-        public GenericResourceContainer GetGenericResources()
+        public virtual GenericResourceContainer GetGenericResources()
         {
             return new GenericResourceContainer(new ClientContext(ClientOptions, Credential, BaseUri, Pipeline), Id);
         }
